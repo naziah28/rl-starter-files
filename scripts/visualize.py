@@ -66,6 +66,7 @@ env.render('human')
 
 for episode in range(args.episodes):
     obs = env.reset()
+    print("Episode: ", episode)
     reward = 0
 
     while True:
@@ -79,6 +80,8 @@ for episode in range(args.episodes):
 
         if done or env.window.closed:
             break
+
+    print("Final Reward: ", reward)
 
     if env.window.closed:
         break
