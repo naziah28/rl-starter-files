@@ -23,6 +23,9 @@ class ACModel(nn.Module, torch_ac.RecurrentACModel):
         self.use_text = use_text
         self.use_memory = use_memory
 
+        print("obs", obs_space )
+        print("actions", action_space)
+
         # Define image embedding
         self.image_conv = nn.Sequential(
             nn.Conv2d(3, 16, (2, 2)),
@@ -100,6 +103,7 @@ class ACModel(nn.Module, torch_ac.RecurrentACModel):
 
         x = self.critic(embedding)
         value = x.squeeze(1)
+
 
         return dist, value, memory
 

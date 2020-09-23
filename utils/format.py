@@ -24,23 +24,47 @@ def get_obss_preprocessor(obs_space):
         obs_space = {"image": obs_space.spaces["image"].shape, "text": 100}
 
         vocab = Vocabulary(obs_space["text"])
+
+
+        print("obs space:", obs_space)
+
         def preprocess_obss(obss, device=None):
+            print("heare")
+
+            #
+            # print("----------------------")
+            # print(len(obss))
+
+            # print(type(obss[0]))
+            # print(obss[0])
+            # print(obss[0].keys())
+
             return torch_ac.DictList({
                 "image": preprocess_images([obs["image"] for obs in obss], device=device),
                 "text": preprocess_texts([obs["mission"] for obs in obss], vocab, device=device)
             })
+
         preprocess_obss.vocab = vocab
+        print("post preprocess")
+        print(preprocess_obss.vocab)
 
     else:
         raise ValueError("Unknown observation space: " + str(obs_space))
+
+    print("POST", preprocess_obss)
 
     return obs_space, preprocess_obss
 
 
 def preprocess_images(images, device=None):
     # Bug of Pytorch: very slow if not first converted to numpy array
-    images = numpy.array(images)
+    try:
+        images = numpy.array(images)
+    except:
+        print("hello")
+        images = tuple(numpy.array(images))
     return torch.tensor(images, device=device, dtype=torch.float)
+
 
 
 def preprocess_texts(texts, vocab, device=None):

@@ -2,7 +2,7 @@ import argparse
 import time
 import numpy
 import torch
-
+import sys
 import utils
 
 
@@ -19,7 +19,7 @@ parser.add_argument("--shift", type=int, default=0,
                     help="number of times the environment is reset at the beginning (default: 0)")
 parser.add_argument("--argmax", action="store_true", default=False,
                     help="select the action with highest probability (default: False)")
-parser.add_argument("--pause", type=float, default=0.1,
+parser.add_argument("--pause", type=float, default=0.5,
                     help="pause duration between two consequent actions of the agent (default: 0.1)")
 parser.add_argument("--gif", type=str, default=None,
                     help="store output as gif with the given filename")
@@ -54,6 +54,11 @@ model_dir = args.model
 agent = utils.Agent(env.observation_space, env.action_space, model_dir,
                     device=device, argmax=args.argmax, use_memory=args.memory, use_text=args.text)
 print("Agent loaded\n")
+
+
+txt_logger = utils.get_txt_logger(model_dir)
+txt_logger.info("{}\n".format(" ".join(sys.argv)))
+txt_logger.info("{}\n".format(args))
 
 # Run the agent
 
